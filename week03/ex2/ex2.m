@@ -24,6 +24,8 @@ clear ; close all; clc
 %  contains the label.
 
 data = load('ex2data1.txt');
+% Xは２種類のテストの点数、yはその点数で合格できるかどうか（1のとき合格、0のとき不合格）
+% NOTE: ２種類のテストの点数から合格か不合格かを分類する
 X = data(:, [1, 2]); y = data(:, 3);
 
 %% ==================== Part 1: Plotting ====================
