@@ -35,6 +35,8 @@ fprintf('Loading data ...\n');
 
 %% Load Data
 data = load('ex1data2.txt');
+% Xは家のサイズとベッドルームの数、yはその家の価格
+% NOTE: 家のサイズとベッドルームの数の変数から、その家の価格を予測する問題
 X = data(:, 1:2);
 y = data(:, 3);
 m = length(y);

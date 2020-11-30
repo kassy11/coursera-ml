@@ -1,4 +1,5 @@
 % データのセットアップはex1.mで済み
+% 
 
 function J = computeCost(X, y, theta)
 %COMPUTECOST Compute cost for linear regression
