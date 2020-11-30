@@ -22,8 +22,7 @@ h = sigmoid(X * theta)
 % TODO: ここはなんで0に設定するのか？
 theta(1) = 0;
 % TODO: ベクトル化の実装があまりわかってない
-% J = (-y' * log(h) - (1-y)' * log(1-h)) ./m + (lambda / 2*m) .* (theta' * theta);
-J = (-y' * log(h) - (1-y)' * log(1-h)) ./m + (lambda / 2*m) .* sum(theta .^2);
+J = (1/m) * ((-y)' * log(h) - (1-y)' * log(1 -h)) + (lambda/(2*m)) * sum(theta .^2);
 grad = (1/m) * X' * (h - y) + (lambda/m) * theta;
 grad(1,1) = (1/m) * X'(1,:) * (h - y);
 
