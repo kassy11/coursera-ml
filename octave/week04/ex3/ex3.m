@@ -32,7 +32,9 @@ num_labels = 10;          % 10 labels, from 1 to 10
 % Load Training Data
 fprintf('Loading and Visualizing Data ...\n')
 
-load('ex3data1.mat'); % training data stored in arrays X, y
+load('ex3data1.mat'); 
+% ロードした時点でXには20x20グレースケール画像のデータが入る
+% NOTE: 画像からどの数字にあたるかを分類する
 m = size(X, 1);
 
 % Randomly select 100 data points to display
