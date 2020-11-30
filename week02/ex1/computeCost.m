@@ -1,4 +1,5 @@
 function J = computeCost(X, y, theta)
+% データのセットアップはex1.mで済み
 %COMPUTECOST Compute cost for linear regression
 %   J = COMPUTECOST(X, y, theta) computes the cost of using theta as the
 %   parameter for linear regression to fit the data points in X and y
@@ -13,8 +14,9 @@ J = 0;
 % Instructions: Compute the cost of a particular choice of theta
 %               You should set J to the cost.
 
-
-
+hypothesis = theta(1) + theta(2) .* X;
+squareErrors = (hypothesis - y).^2;
+J = squareErrors / (2*m);
 
 
 % =========================================================================
