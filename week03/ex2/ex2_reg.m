@@ -25,6 +25,8 @@ clear ; close all; clc
 %  contains the label (y).
 
 data = load('ex2data2.txt');
+% Xは製品テスト結果、yは適正かどうか
+% NOTE: ２つの製品テスト結果から、製品が適正かどうかを判定する
 X = data(:, [1, 2]); y = data(:, 3);
 
 plotData(X, y);
