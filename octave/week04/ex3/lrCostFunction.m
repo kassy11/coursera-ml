@@ -1,3 +1,4 @@
+% NOTE: ベクトル化されたCostFunction
 function [J, grad] = lrCostFunction(theta, X, y, lambda)
 %LRCOSTFUNCTION Compute cost and gradient for logistic regression with 
 %regularization
