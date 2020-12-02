@@ -30,7 +30,8 @@ X = [ones(m, 1) X];
 %       for each row.
 %       
 
-[probablity ,p] = max(sigmoid(X * all_theta'), [], 2);
+% 行単位での最大値とそのインデックス(= ラベル)を得る
+[probability, p] = max((sigmoid(X * all_theta')),[],2);
 
 
 
