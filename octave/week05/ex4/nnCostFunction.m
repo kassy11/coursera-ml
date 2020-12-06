@@ -18,6 +18,8 @@ function [J grad] = nnCostFunction(nn_params, ...
 % for our 2 layer neural network
 
 % アンロール（展開）されたパラメータをもとに戻す
+% Theta1       25 x 401
+% Theta2       10 x 26
 Theta1 = reshape(nn_params(1:hidden_layer_size * (input_layer_size + 1)), ...
                  hidden_layer_size, (input_layer_size + 1));
 
@@ -73,14 +75,17 @@ Theta2_grad = zeros(size(Theta2));
 
 % mapping y to Y
 Y = zeros(m,num_labels);  % 5000 x 10
+% ラベルのベクトルをつくる（正解の場所だけが1になる）
 for i = 1:m
   Y(i,y(i)) = 1;
 end
 
+%%% h(θ)を求める %%%
 % calculate h_theta
-A1 = [ones(m,1) X];             % 5000 x 401
+% フィートフォワードでh(θ)を求める
+A1 = [ones(m,1) X];             % 5000 x 401（バイアスユニットを含める）
 Z2 = A1 * Theta1';              % 5000 x 25                   
-A2 = [ones(m,1) sigmoid(Z2)];   % 5000 x 26
+A2 = [ones(m,1) sigmoid(Z2)];   % 5000 x 26（バイアスユニットを含める）
 Z3 = A2 * Theta2';              % 5000 x 10
 h = sigmoid(Z3);                % 5000 x 10
 
@@ -96,18 +101,22 @@ h = sigmoid(Z3);                % 5000 x 10
 % without loops
 %J = sum((-Y .* log(h) - (1-Y) .* log(1-h))(:));
 
+%%% Jを求める %%%
 % vectorize
+% ベクトル表現でJを求める
 J = -Y(:)' * log(h(:)) - (1-Y(:))' * log(1-h(:));
 
 J = J/m;
 
 
 % regularize J
+% 正規化項を足す
 J += (sum(Theta1(:,2:end)(:).^2) + sum(Theta2(:,2:end)(:).^2)) * lambda / (2*m) ;
 
 
 
-%%% backpropagation %%%%%
+%%% バックプロパゲーションで偏微分項を求める %%%%
+% TODO: ここの理解
 
 delta3 = h - Y;                                            % 5000 x 10
 delta2 = (delta3*Theta2(:,2:end)) .* sigmoidGradient(Z2);  % 5000 x 25 
@@ -119,18 +128,9 @@ Theta1_grad = Delta1/m; % 25 x 401
 Theta2_grad = Delta2/m; % 10 x 26
 
 % regulize Theta_grad
+% 正規化項を足す
 Theta1_grad(:,2:end) += Theta1(:,2:end) * lambda/m;
 Theta2_grad(:,2:end) += Theta2(:,2:end) * lambda/m; 
-
-
-
-
-
-
-
-
-
-
 
 
 
