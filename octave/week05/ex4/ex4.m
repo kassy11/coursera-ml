@@ -32,6 +32,8 @@ num_labels = 10;          % 10 labels, from 1 to 10
 % Load Training Data
 fprintf('Loading and Visualizing Data ...\n')
 
+% Xは5000（トレーニングセットの数）×400(20digit×20digitに展開された)行列
+% yは5000×1のラベルの行列
 load('ex4data1.mat');
 m = size(X, 1);
 

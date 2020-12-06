@@ -16,6 +16,8 @@ function [J grad] = nnCostFunction(nn_params, ...
 
 % Reshape nn_params back into the parameters Theta1 and Theta2, the weight matrices
 % for our 2 layer neural network
+
+% アンロール（展開）されたパラメータをもとに戻す
 Theta1 = reshape(nn_params(1:hidden_layer_size * (input_layer_size + 1)), ...
                  hidden_layer_size, (input_layer_size + 1));
 
@@ -23,7 +25,7 @@ Theta2 = reshape(nn_params((1 + (hidden_layer_size * (input_layer_size + 1))):en
                  num_labels, (hidden_layer_size + 1));
 
 % Setup some useful variables
-m = size(X, 1);
+m = size(X, 1); % = 5000(トレーニングセットの数)
          
 % You need to return the following variables correctly 
 J = 0;
@@ -63,10 +65,62 @@ Theta2_grad = zeros(size(Theta2));
 %
 
 
+% X          5000 x 400
+% y          5000 x 1
+% nn_params 10285 x 1
+% Theta1       25 x 401
+% Theta2       10 x 26
+
+% mapping y to Y
+Y = zeros(m,num_labels);  % 5000 x 10
+for i = 1:m
+  Y(i,y(i)) = 1;
+end
+
+% calculate h_theta
+A1 = [ones(m,1) X];             % 5000 x 401
+Z2 = A1 * Theta1';              % 5000 x 25                   
+A2 = [ones(m,1) sigmoid(Z2)];   % 5000 x 26
+Z3 = A2 * Theta2';              % 5000 x 10
+h = sigmoid(Z3);                % 5000 x 10
+
+% calculate cost function J  (without regularization)
+
+% using loops
+% for i = 1:m
+%   for k = 1:num_labels
+%     J += -Y(i,k) * log(h(i,k)) - (1-Y(i,k)) * log(1 - h(i,k));
+%   end
+% end
+
+% without loops
+%J = sum((-Y .* log(h) - (1-Y) .* log(1-h))(:));
+
+% vectorize
+J = -Y(:)' * log(h(:)) - (1-Y(:))' * log(1-h(:));
+
+J = J/m;
+
+
+% regularize J
+J += (sum(Theta1(:,2:end)(:).^2) + sum(Theta2(:,2:end)(:).^2)) * lambda / (2*m) ;
 
 
 
+%%% backpropagation %%%%%
 
+delta3 = h - Y;                                            % 5000 x 10
+delta2 = (delta3*Theta2(:,2:end)) .* sigmoidGradient(Z2);  % 5000 x 25 
+
+Delta1 = delta2' * A1;  % 25 x 401
+Delta2 = delta3' * A2;  % 10 x 26
+
+Theta1_grad = Delta1/m; % 25 x 401
+Theta2_grad = Delta2/m; % 10 x 26
+
+% regulize Theta_grad
+Theta1_grad(:,2:end) += Theta1(:,2:end) * lambda/m;
+Theta2_grad(:,2:end) += Theta2(:,2:end) * lambda/m; 
 
 
 
